@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX Live Search</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <style>
+      * {
+        background-color: #272727;
+      }
+
+      #result {
+        position: absolute;
+        width: 80%;
+        max-width: 900px;
+        cursor: pointer;
+        overflow-y: auto;
+        max-height: 400px;
+        box-sizing: border-box;
+        z-index: 1001;
+      }
+      .container1 {
+        width: 100%;
+      }
+      .head {
+        color: #f1f1f1;
+      }
+      .link-class:hover {
+        background-color: #f1f1f1;
+      }
+      .center {
+        text-align: center;
+      }
+      .text-muted {
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container1">
+      <div class="container">
+        <br /><br />
+        <h2 class="center head">Ajax JQuery Live Data Search with JSON</h2>
+        <h3 class="center head">Members Data</h3>
+        <br /><br />
+        <div class="center">
+          <input
+            class="form-control"
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Search"
+          />
+        </div>
+        <ul class="list-group" id="result"></ul>
+        <br />
+        <br />
+        <p class="center head">
+          Created by
+          <a href="https://github.com/M-Usman-Tahir" target="_blank"
+            >Muhammad Usman Tahir</a
+          >
+        </p>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        console.log(document.getElementById("result").width);
+        console.log(document.getElementById("search").size);
+        $("#search").keyup(function () {
+          $("#result").html("");
+          let searchField = $("#search").val();
+          let exp = new RegExp(searchField, "i");
+          $.getJSON("data.json", function (data) {
+            $.each(data, function (key, value) {
+              if (
+                value.name.search(exp) != -1 ||
+                value.location.search(exp) != -1
+              ) {
+                $("#result").append(
+                  '<li class="list-group-item link-class"><img src="' +
+                    value.image +
+                    '" height="40" width="40" class="img-thumbnail" /> ' +
+                    value.name +
+                    ' | <span class="text-muted">' +
+                    value.location +
+                    "</span></li>"
+                );
+              }
+              if ($("#search").val() === "") {
+                $("#result").html("");
+              }
+              document.getElementById("result").style.width =
+                document.getElementById("search").size + "";
+              console.log(document.getElementById("result").width);
+              console.log(document.getElementById("search").size);
+            });
+          });
+        });
+        $("#result").on("click", "li", function () {
+          let click_text = $(this).text().split("|");
+          $("#search").val($.trim(click_text[0]));
+          $("#result").html("");
+        });
+      });
+    </script>
+  </body>
+</html>
